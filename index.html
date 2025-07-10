@@ -3,38 +3,116 @@
   <head>
     <meta charset="UTF-8" />
     <title>Vidéo AutoPlay</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <style>
+      html,
       body {
+        height: 100%;
         margin: 0;
-        background: black;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
+        padding: 0;
+        background: #000;
+        overflow: hidden;
       }
-      video {
-        width: 100%;
-        height: auto;
-        max-height: 100vh;
+      body {
+        width: 100vw;
+        height: 100vh;
+        position: relative;
+      }
+      .video-bg {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        object-fit: cover;
+        background: #000;
+      }
+      .center-btn {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 2;
+        background: rgba(0, 0, 0, 0.6);
+        color: #fff;
+        border: none;
+        border-radius: 50px;
+        padding: 18px 32px;
+        font-size: 1.3rem;
+        font-weight: bold;
+        cursor: pointer;
+        box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s;
+      }
+      .center-btn.visible {
+        opacity: 1;
+        pointer-events: auto;
       }
     </style>
   </head>
   <body>
-    <video autoplay muted loop playsinline>
+    <video
+      id="maVideo"
+      class="video-bg"
+      autoplay
+      muted
+      loop
+      playsinline
+      webkit-playsinline
+      preload="auto"
+      poster=""
+    >
       <source src="video.mp4" type="video/mp4" />
+      <source src="video.webm" type="video/webm" />
       Votre navigateur ne supporte pas la lecture vidéo.
     </video>
-    <button onclick="pauseLecture()">Pause / Lecture</button>
+    <button id="pauseBtn" class="center-btn">Pause</button>
 
     <script>
-      function pauseLecture() {
-        const video = document.getElementById("maVideo");
+      const video = document.getElementById("maVideo");
+      const btn = document.getElementById("pauseBtn");
+      let btnTimeout = null;
+
+      function showBtn() {
+        btn.classList.add("visible");
+        clearTimeout(btnTimeout);
+        btnTimeout = setTimeout(() => {
+          btn.classList.remove("visible");
+        }, 2000);
+      }
+
+      function togglePlayPause() {
         if (video.paused) {
           video.play();
+          btn.textContent = "Pause";
         } else {
           video.pause();
+          btn.textContent = "Lecture";
         }
+        showBtn();
       }
+
+      // Click on video toggles play/pause and shows button
+      video.addEventListener("click", togglePlayPause);
+
+      // Click on button toggles play/pause and resets timer
+      btn.addEventListener("click", togglePlayPause);
+
+      // Update button text on play/pause events
+      video.addEventListener("play", () => {
+        btn.textContent = "Pause";
+      });
+      video.addEventListener("pause", () => {
+        btn.textContent = "Lecture";
+      });
+
+      // Show button on first load for 2s
+      window.addEventListener("DOMContentLoaded", () => {
+        btn.textContent = video.paused ? "Lecture" : "Pause";
+        showBtn();
+      });
     </script>
   </body>
 </html>
