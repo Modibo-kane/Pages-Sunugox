@@ -1,29 +1,40 @@
-
 <!DOCTYPE html>
 <html lang="fr">
-<head>
-  <meta charset="UTF-8">
-  <title>Vidéo AutoPlay</title>
-  <style>
-    body {
-      margin: 0;
-      background: black;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
-    video {
-      width: 100%;
-      height: auto;
-      max-height: 100vh;
-    }
-  </style>
-</head>
-<body>
-  <video autoplay muted loop playsinline>
-    <source src="video.mp4" type="video/mp4">
-    Votre navigateur ne supporte pas la lecture vidéo.
-  </video>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Vidéo AutoPlay</title>
+    <style>
+      body {
+        margin: 0;
+        background: black;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+      video {
+        width: 100%;
+        height: auto;
+        max-height: 100vh;
+      }
+    </style>
+  </head>
+  <body>
+    <video autoplay muted loop playsinline>
+      <source src="video.mp4" type="video/mp4" />
+      Votre navigateur ne supporte pas la lecture vidéo.
+    </video>
+    <button onclick="pauseLecture()">Pause / Lecture</button>
+
+    <script>
+      function pauseLecture() {
+        const video = document.getElementById("maVideo");
+        if (video.paused) {
+          video.play();
+        } else {
+          video.pause();
+        }
+      }
+    </script>
+  </body>
 </html>
